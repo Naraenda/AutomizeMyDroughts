@@ -18,6 +18,17 @@ namespace AutomizeMyDroughts.UI
         private VisualElement _root;
         private Floodgate _building;
 
+        private Toggle    _uiAutomate;
+        private SliderInt _uiHeightD;
+        private SliderInt _uiHeightT;
+        private SliderInt _uiLowerIntervalD;
+        private SliderInt _uiLowerIntervalT;
+        private Toggle    _uiRaiseInsteadD;
+        private Toggle    _uiRaiseInsteadT;
+        private Toggle    _uiLowerWindsD;
+        private Toggle    _uiLowerWindsT;
+        private Label     _uiSummary;
+
         public AutomatedFloodgateFragment(UIBuilder builder) {
             _uibuilder = builder;
         }
@@ -40,43 +51,55 @@ namespace AutomizeMyDroughts.UI
                     .AddPreset(f => f.Labels().GameText(name: "summary", text: "Hello World!"))
                     .Build()
                 ).BuildAndInitialize();
+
+            _uiAutomate = _root.Q<Toggle>("automate");
+            _uiSummary = _root.Q<Label>("summary");
+
+            _uiHeightD = _root.Q<SliderInt>("dHeight");
+            _uiHeightT = _root.Q<SliderInt>("tHeight");
+
+            _uiLowerIntervalD = _root.Q<SliderInt>("dLowerInterval");
+            _uiLowerIntervalT = _root.Q<SliderInt>("tLowerInterval");
+
+            _uiRaiseInsteadD =_root.Q<Toggle>("dRaiseInstead");
+            _uiRaiseInsteadT =_root.Q<Toggle>("tRaiseInstead");
+
+            _uiLowerWindsD = _root.Q<Toggle>("dLowerWinds");
+            _uiLowerWindsT = _root.Q<Toggle>("tLowerWinds");
+
             return _root;
         }
 
         public void ShowFragment(GameObject entity) {
             _building = entity?.GetComponent<Floodgate>();
-
-            var config = _building?.GetComponent<AutomatedFloodgate>();
-
-            if (config == null)
+            if (_building is null)
                 return;
 
-            _root.Q<Toggle>("automate").value = config.Schedule.Automate;
+            var config = _building.GetComponent<AutomatedFloodgate>() ??
+                _building.gameObject.AddComponent<AutomatedFloodgate>();
+            var schedule = config.Schedule;
 
-            _root.Q<SliderInt>("dHeight").highValue = 2 * _building.MaxHeight;
-            _root.Q<SliderInt>("tHeight").highValue = 2 * _building.MaxHeight;
-            
-            _root.Q<SliderInt>("dHeight").value = Mathf.RoundToInt(2 * config.Schedule.Drought.Height);
-            _root.Q<SliderInt>("tHeight").value = Mathf.RoundToInt(2 * config.Schedule.Temperate.Height);
+            _uiAutomate.value = schedule.Automate;
 
-            _root.Q<SliderInt>("dLowerInterval").value = config.Schedule.Drought.LowerInterval;
-            _root.Q<SliderInt>("tLowerInterval").value = config.Schedule.Temperate.LowerInterval;
+            _uiHeightD.highValue = 2 * _building.MaxHeight;
+            _uiHeightT.highValue = 2 * _building.MaxHeight;
 
-            _root.Q<Toggle>("dRaiseInstead").value = config.Schedule.Drought.RaiseInsteadOfLower;
-            _root.Q<Toggle>("tRaiseInstead").value = config.Schedule.Temperate.RaiseInsteadOfLower;
+            _uiHeightD.value = Mathf.RoundToInt(2 * schedule.Drought.Height);
+            _uiHeightT.value = Mathf.RoundToInt(2 * schedule.Temperate.Height);
 
-            _root.Q<Toggle>("dLowerWinds").value = config.Schedule.Drought.LowerWithLowWinds;
-            _root.Q<Toggle>("tLowerWinds").value = config.Schedule.Temperate.LowerWithLowWinds;
+            _uiLowerIntervalD.value = schedule.Drought.LowerInterval;
+            _uiLowerIntervalT.value = schedule.Temperate.LowerInterval;
+
+            _uiRaiseInsteadD.value = schedule.Drought.RaiseInsteadOfLower;
+            _uiRaiseInsteadT.value = schedule.Temperate.RaiseInsteadOfLower;
+
+            _uiLowerWindsD.value = schedule.Drought.LowerWithLowWinds;
+            _uiLowerWindsT.value = schedule.Temperate.LowerWithLowWinds;
         }
 
         public void ClearFragment() {
-            // Not sure if this is needed.
-            if (!IsValidBuilding()) {
-                _root.ToggleDisplayStyle(false);
-                return;
-            }
-
-            OnConfigurationChanged();
+            if (IsValidBuilding())
+                OnConfigurationChanged();
 
             _root.ToggleDisplayStyle(false);
         }
@@ -97,48 +120,29 @@ namespace AutomizeMyDroughts.UI
         }
 
         private void OnConfigurationChanged() {
-            var automateUI = _root.Q<Toggle>("automate");
+            var schedule = _building.GetComponent<AutomatedFloodgate>().Schedule;
 
-            var dHeightUI = _root.Q<SliderInt>("dHeight");
-            var tHeightUI = _root.Q<SliderInt>("tHeight");
+            _uiHeightD.label = string.Format("Set height to {0}", _uiHeightD.value / 2f);
+            _uiHeightT.label = string.Format("Set height to {0}", _uiHeightT.value / 2f);
 
-            var dLoweringUI = _root.Q<SliderInt>("dLowerInterval");
-            var tLoweringUI = _root.Q<SliderInt>("tLowerInterval");
+            _uiLowerIntervalD.label = string.Format(_uiLowerIntervalD.value > 0 ? "Lower every {0} days" : "Lower never", _uiLowerIntervalD.value);
+            _uiLowerIntervalT.label = string.Format(_uiLowerIntervalT.value > 0 ? "Lower every {0} days" : "Lower never", _uiLowerIntervalT.value);
 
-            var dRaiseInsteadUI = _root.Q<Toggle>("dRaiseInstead");
-            var tRaiseInsteadUI = _root.Q<Toggle>("tRaiseInstead");
+            schedule.Automate = _uiAutomate.value;
 
-            var dLowerWindsUI = _root.Q<Toggle>("dLowerWinds");
-            var tLowerWindsUI = _root.Q<Toggle>("tLowerWinds");
+            schedule.Drought.Height = _uiHeightD.value / 2f;
+            schedule.Temperate.Height = _uiHeightT.value / 2f;
 
-            var config = _building.GetComponent<AutomatedFloodgate>();
+            schedule.Drought.LowerInterval = _uiLowerIntervalD.value;
+            schedule.Temperate.LowerInterval = _uiLowerIntervalT.value;
 
-            if (config is null) {
-                Plugin.L.LogInfo("Adding AutomatedFloodgate component.");
-                config = _building.gameObject.AddComponent<AutomatedFloodgate>();
-            }
+            schedule.Drought.RaiseInsteadOfLower = _uiRaiseInsteadD.value;
+            schedule.Temperate.RaiseInsteadOfLower = _uiRaiseInsteadT.value;
 
-            dHeightUI.label = string.Format("Set height to {0}", dHeightUI.value / 2f);
-            tHeightUI.label = string.Format("Set height to {0}", tHeightUI.value / 2f);
+            schedule.Drought.LowerWithLowWinds = _uiLowerWindsD.value;
+            schedule.Temperate.LowerWithLowWinds = _uiLowerWindsT.value;
 
-            dLoweringUI.label = string.Format(dLoweringUI.value > 0 ? "Lower every {0} days" : "Lower never", dLoweringUI.value);
-            tLoweringUI.label = string.Format(tLoweringUI.value > 0 ? "Lower every {0} days" : "Lower never", tLoweringUI.value);
-
-            config.Schedule.Automate = automateUI.value;
-
-            config.Schedule.Drought.Height = dHeightUI.value / 2f;
-            config.Schedule.Temperate.Height = tHeightUI.value / 2f;
-
-            config.Schedule.Drought.LowerInterval = dLoweringUI.value;
-            config.Schedule.Temperate.LowerInterval = tLoweringUI.value;
-
-            config.Schedule.Drought.RaiseInsteadOfLower = dRaiseInsteadUI.value;
-            config.Schedule.Temperate.RaiseInsteadOfLower = tRaiseInsteadUI.value;
-
-            config.Schedule.Drought.LowerWithLowWinds = dLowerWindsUI.value;
-            config.Schedule.Temperate.LowerWithLowWinds = tLowerWindsUI.value;
-
-            _root.Q<Label>("summary").text = $"With temperate weather {config.Schedule.Temperate.Summarize()}. With dry weather {config.Schedule.Drought.Summarize()}";
+            _uiSummary.text = $"With temperate weather {schedule.Temperate.Summarize()}. With dry weather {schedule.Drought.Summarize()}";
         }
     }
 

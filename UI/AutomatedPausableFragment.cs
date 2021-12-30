@@ -1,5 +1,4 @@
-﻿using AutomizeMyDroughts.Common;
-using AutomizeMyDroughts.Components;
+﻿using AutomizeMyDroughts.Components;
 using Bindito.Core;
 using Timberborn.Buildings;
 using Timberborn.CoreUI;
@@ -7,8 +6,6 @@ using Timberborn.EntityPanelSystem;
 using TimberbornAPI.UIBuilderSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
-
-using Plugin = AutomizeMyDroughts.AutomizeMyDroughtsPlugin;
 
 namespace AutomizeMyDroughts.UI
 {
@@ -18,6 +15,15 @@ namespace AutomizeMyDroughts.UI
 
         private VisualElement _root;
         private PausableBuilding _building;
+
+        private Toggle _uiAutomate;
+        private Toggle _uiWorkDayD;
+        private Toggle _uiWorkDayT;
+        private Toggle _uiWorkNightD;
+        private Toggle _uiWorkNightT;
+        private Toggle _uiWorkLowWindD;
+        private Toggle _uiWorkLowWindT;
+        private Label  _uiSummary;
 
         public AutomatedPausableFragment(UIBuilder builder) {
             _uibuilder = builder;
@@ -39,34 +45,47 @@ namespace AutomizeMyDroughts.UI
                     .AddPreset(f => f.Labels().GameText(name: "summary", text: "Hello World!"))
                     .Build()
                 ).BuildAndInitialize();
+
+            _uiAutomate = _root.Q<Toggle>("automate");
+            _uiSummary = _root.Q<Label>("summary");
+
+            _uiWorkDayD = _root.Q<Toggle>("dWorkDay");
+            _uiWorkDayT = _root.Q<Toggle>("tWorkDay");
+
+            _uiWorkNightD = _root.Q<Toggle>("dWorkNight");
+            _uiWorkNightT = _root.Q<Toggle>("tWorkNight");
+
+            _uiWorkLowWindD = _root.Q<Toggle>("dWorkLowWind");
+            _uiWorkLowWindT = _root.Q<Toggle>("tWorkLowWind");
+
             return _root;
         }
 
         public void ShowFragment(GameObject entity) {
             _building = entity.GetComponent<PausableBuilding>();
+            if (_building is null || !_building.IsPausable())
+                return;
 
-            var config = _building?.GetComponent<AutomatedPausable>()?.Schedule;
-            _root.Q<Toggle>("automate").value = config?.Automate ?? false;
+            var config = _building.GetComponent<AutomatedPausable>() ?? 
+                _building.gameObject.AddComponent<AutomatedPausable>();
+            var schedule = config.Schedule;
 
-            _root.Q<Toggle>("tWorkDay").value = config?.Temperate?.WorkDuringDay ?? false;
-            _root.Q<Toggle>("dWorkDay").value = config?.Drought?.WorkDuringDay ?? false;
+            _uiAutomate.value = schedule.Automate;
 
-            _root.Q<Toggle>("tWorkNight").value = config?.Temperate?.WorkDuringNight ?? false;
-            _root.Q<Toggle>("dWorkNight").value = config?.Drought?.WorkDuringNight ?? false;
+            _uiWorkDayD.value = schedule.Drought.WorkDuringDay;
+            _uiWorkDayT.value = schedule.Temperate.WorkDuringDay;
 
-            _root.Q<Toggle>("tWorkLowWind").value = config?.Temperate?.WorkDuringLowWinds ?? false;
-            _root.Q<Toggle>("dWorkLowWind").value = config?.Drought?.WorkDuringLowWinds ?? false;
+            _uiWorkNightD.value = schedule.Drought.WorkDuringNight;
+            _uiWorkNightT.value = schedule.Temperate.WorkDuringNight;
+
+            _uiWorkLowWindD.value = schedule.Drought.WorkDuringLowWinds;
+            _uiWorkLowWindT.value = schedule.Temperate.WorkDuringLowWinds;
         }
 
         public void ClearFragment() {
-            // Not sure if this is needed.
-            if (!IsValidBuilding()) {
-                _root.ToggleDisplayStyle(false);
-                return;
-            }
+            if (IsValidBuilding())
+                OnConfigurationChanged();
 
-            OnConfigurationChanged();
-            
             _root.ToggleDisplayStyle(false);
         }
 
@@ -86,24 +105,17 @@ namespace AutomizeMyDroughts.UI
         }
 
         private void OnConfigurationChanged() {
-            // Parse UI stuff
-            var ap = _building.GetComponent<AutomatedPausable>();
-            
-            if (ap is null) {
-                Plugin.L.LogInfo("Adding AutomatedPausable component.");
-                ap = _building.gameObject.AddComponent<AutomatedPausable>();
-            }
-            var config = ap.Schedule;
+            var schedule = _building.GetComponent<AutomatedPausable>().Schedule;
 
-            config.Automate = _root.Q<Toggle>("automate").value;
-            config.Temperate.WorkDuringDay = _root.Q<Toggle>("tWorkDay").value;
-            config.Drought  .WorkDuringDay = _root.Q<Toggle>("dWorkDay").value;
-            config.Temperate.WorkDuringNight = _root.Q<Toggle>("tWorkNight").value;
-            config.Drought  .WorkDuringNight = _root.Q<Toggle>("dWorkNight").value;
-            config.Temperate.WorkDuringLowWinds = _root.Q<Toggle>("tWorkLowWind").value;
-            config.Drought  .WorkDuringLowWinds = _root.Q<Toggle>("dWorkLowWind").value;
+            schedule.Automate = _uiAutomate.value;
+            schedule.Temperate.WorkDuringDay = _uiWorkDayT.value;
+            schedule.Drought.WorkDuringDay = _uiWorkDayD.value;
+            schedule.Temperate.WorkDuringNight = _uiWorkNightT.value;
+            schedule.Drought.WorkDuringNight = _uiWorkNightD.value;
+            schedule.Temperate.WorkDuringLowWinds = _uiWorkLowWindT.value;
+            schedule.Drought.WorkDuringLowWinds = _uiWorkLowWindD.value;
 
-            _root.Q<Label>("summary").text = $"With temperate weather {config.Temperate.Summarize()}. With dry weather {config.Drought.Summarize()}.";
+            _uiSummary.text = $"With temperate weather {schedule.Temperate.Summarize()}. With dry weather {schedule.Drought.Summarize()}.";
         }
     }
 
