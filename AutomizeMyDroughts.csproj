@@ -1,0 +1,900 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>AutomizeMyDroughts</AssemblyName>
+    <Description>Building that respond to droughts!</Description>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>9.0</LangVersion>
+    <Authors>Naraenda</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.17" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+    <PackageReference Include="TimberAPI" Version="0.2.0" />
+	  <PackageReference Include="UnityEngine.Modules" Version="2021.2.7" IncludeAssets="compile" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Bindito.Core">
+      <HintPath>Libs\Bindito.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Bindito.Unity">
+      <HintPath>Libs\Bindito.Unity.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="LINQtoCSV">
+      <HintPath>Libs\LINQtoCSV.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.AlertPanelSystem">
+      <HintPath>Libs\Timberborn.AlertPanelSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ApplicationSettingsSystem">
+      <HintPath>Libs\Timberborn.ApplicationSettingsSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.AreaSelectionSystem">
+      <HintPath>Libs\Timberborn.AreaSelectionSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.AssetSystem">
+      <HintPath>Libs\Timberborn.AssetSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Attractions">
+      <HintPath>Libs\Timberborn.Attractions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.AttractionsUI">
+      <HintPath>Libs\Timberborn.AttractionsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Autosaving">
+      <HintPath>Libs\Timberborn.Autosaving.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.AutosavingUI">
+      <HintPath>Libs\Timberborn.AutosavingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Beavers">
+      <HintPath>Libs\Timberborn.Beavers.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BeaversUI">
+      <HintPath>Libs\Timberborn.BeaversUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BehaviorSystem">
+      <HintPath>Libs\Timberborn.BehaviorSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BehaviorSystemUI">
+      <HintPath>Libs\Timberborn.BehaviorSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Benchmarking">
+      <HintPath>Libs\Timberborn.Benchmarking.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BlockObjectAccesses">
+      <HintPath>Libs\Timberborn.BlockObjectAccesses.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BlockObjectTools">
+      <HintPath>Libs\Timberborn.BlockObjectTools.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BlockSystem">
+      <HintPath>Libs\Timberborn.BlockSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BlockSystemNavigation">
+      <HintPath>Libs\Timberborn.BlockSystemNavigation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BlockSystemUI">
+      <HintPath>Libs\Timberborn.BlockSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BonusSystem">
+      <HintPath>Libs\Timberborn.BonusSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Bootstrapper">
+      <HintPath>Libs\Timberborn.Bootstrapper.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BottomBarSystem">
+      <HintPath>Libs\Timberborn.BottomBarSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BottomMatching">
+      <HintPath>Libs\Timberborn.BottomMatching.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuilderHubSystem">
+      <HintPath>Libs\Timberborn.BuilderHubSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuildingRange">
+      <HintPath>Libs\Timberborn.BuildingRange.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Buildings">
+      <HintPath>Libs\Timberborn.Buildings.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuildingsNavigation">
+      <HintPath>Libs\Timberborn.BuildingsNavigation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuildingsReachability">
+      <HintPath>Libs\Timberborn.BuildingsReachability.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuildingStatuses">
+      <HintPath>Libs\Timberborn.BuildingStatuses.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuildingsUI">
+      <HintPath>Libs\Timberborn.BuildingsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.BuildingTools">
+      <HintPath>Libs\Timberborn.BuildingTools.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CameraAnchorPickerSystem">
+      <HintPath>Libs\Timberborn.CameraAnchorPickerSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CameraSystem">
+      <HintPath>Libs\Timberborn.CameraSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Carrying">
+      <HintPath>Libs\Timberborn.Carrying.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CarryingUI">
+      <HintPath>Libs\Timberborn.CarryingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CharacterInitialization">
+      <HintPath>Libs\Timberborn.CharacterInitialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CharacterModelSystem">
+      <HintPath>Libs\Timberborn.CharacterModelSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CharacterMovementSystem">
+      <HintPath>Libs\Timberborn.CharacterMovementSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CharacterNavigation">
+      <HintPath>Libs\Timberborn.CharacterNavigation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Characters">
+      <HintPath>Libs\Timberborn.Characters.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CharactersUI">
+      <HintPath>Libs\Timberborn.CharactersUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Clusters">
+      <HintPath>Libs\Timberborn.Clusters.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ClustersUI">
+      <HintPath>Libs\Timberborn.ClustersUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Common">
+      <HintPath>Libs\Timberborn.Common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ConstructibleSystem">
+      <HintPath>Libs\Timberborn.ConstructibleSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ConstructionMode">
+      <HintPath>Libs\Timberborn.ConstructionMode.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ConstructionSites">
+      <HintPath>Libs\Timberborn.ConstructionSites.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ConstructionSitesUI">
+      <HintPath>Libs\Timberborn.ConstructionSitesUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Coordinates">
+      <HintPath>Libs\Timberborn.Coordinates.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Core">
+      <HintPath>Libs\Timberborn.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CoreUI">
+      <HintPath>Libs\Timberborn.CoreUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CursorToolSystem">
+      <HintPath>Libs\Timberborn.CursorToolSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Cutting">
+      <HintPath>Libs\Timberborn.Cutting.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.CuttingUI">
+      <HintPath>Libs\Timberborn.CuttingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DeathSystem">
+      <HintPath>Libs\Timberborn.DeathSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Debugging">
+      <HintPath>Libs\Timberborn.Debugging.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DebuggingUI">
+      <HintPath>Libs\Timberborn.DebuggingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Demolishing">
+      <HintPath>Libs\Timberborn.Demolishing.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DemolishingToolGroupSystem">
+      <HintPath>Libs\Timberborn.DemolishingToolGroupSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DemolishingUI">
+      <HintPath>Libs\Timberborn.DemolishingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Diagnostics">
+      <HintPath>Libs\Timberborn.Diagnostics.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DiagnosticsUI">
+      <HintPath>Libs\Timberborn.DiagnosticsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DistributionSystem">
+      <HintPath>Libs\Timberborn.DistributionSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DistributionSystemUI">
+      <HintPath>Libs\Timberborn.DistributionSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DwellingSystem">
+      <HintPath>Libs\Timberborn.DwellingSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.DwellingSystemUI">
+      <HintPath>Libs\Timberborn.DwellingSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.EditorStarter">
+      <HintPath>Libs\Timberborn.EditorStarter.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Effects">
+      <HintPath>Libs\Timberborn.Effects.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Emptying">
+      <HintPath>Libs\Timberborn.Emptying.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.EmptyingUI">
+      <HintPath>Libs\Timberborn.EmptyingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.EnterableSystem">
+      <HintPath>Libs\Timberborn.EnterableSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.EntityPanelSystem">
+      <HintPath>Libs\Timberborn.EntityPanelSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.EntitySystem">
+      <HintPath>Libs\Timberborn.EntitySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ErrorReporting">
+      <HintPath>Libs\Timberborn.ErrorReporting.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ErrorReportingUI">
+      <HintPath>Libs\Timberborn.ErrorReportingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ExperimentalModeSystem">
+      <HintPath>Libs\Timberborn.ExperimentalModeSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.FactionSystem">
+      <HintPath>Libs\Timberborn.FactionSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.FactionSystemGame">
+      <HintPath>Libs\Timberborn.FactionSystemGame.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.FactionSystemGameUI">
+      <HintPath>Libs\Timberborn.FactionSystemGameUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.FeatureToggleSystem">
+      <HintPath>Libs\Timberborn.FeatureToggleSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Fences">
+      <HintPath>Libs\Timberborn.Fences.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Fields">
+      <HintPath>Libs\Timberborn.Fields.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.FieldsUI">
+      <HintPath>Libs\Timberborn.FieldsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Forestry">
+      <HintPath>Libs\Timberborn.Forestry.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ForestryUI">
+      <HintPath>Libs\Timberborn.ForestryUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameDistricts">
+      <HintPath>Libs\Timberborn.GameDistricts.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameDistrictsUI">
+      <HintPath>Libs\Timberborn.GameDistrictsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameExitSystem">
+      <HintPath>Libs\Timberborn.GameExitSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameSaveRepositorySystem">
+      <HintPath>Libs\Timberborn.GameSaveRepositorySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameSaveRepositorySystemUI">
+      <HintPath>Libs\Timberborn.GameSaveRepositorySystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameSaveRuntimeSystem">
+      <HintPath>Libs\Timberborn.GameSaveRuntimeSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameSaveRuntimeSystemUI">
+      <HintPath>Libs\Timberborn.GameSaveRuntimeSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameSound">
+      <HintPath>Libs\Timberborn.GameSound.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameStatistics">
+      <HintPath>Libs\Timberborn.GameStatistics.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GameUI">
+      <HintPath>Libs\Timberborn.GameUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Gathering">
+      <HintPath>Libs\Timberborn.Gathering.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GatheringUI">
+      <HintPath>Libs\Timberborn.GatheringUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GenericStoreSystem">
+      <HintPath>Libs\Timberborn.GenericStoreSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GoalsSystem">
+      <HintPath>Libs\Timberborn.GoalsSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GolemInitialization">
+      <HintPath>Libs\Timberborn.GolemInitialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Golems">
+      <HintPath>Libs\Timberborn.Golems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GolemsUI">
+      <HintPath>Libs\Timberborn.GolemsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GolemUpkeep">
+      <HintPath>Libs\Timberborn.GolemUpkeep.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GoodConsumingBuildingSystem">
+      <HintPath>Libs\Timberborn.GoodConsumingBuildingSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GoodConsumingBuildingSystemUI">
+      <HintPath>Libs\Timberborn.GoodConsumingBuildingSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Goods">
+      <HintPath>Libs\Timberborn.Goods.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GoodStackSystem">
+      <HintPath>Libs\Timberborn.GoodStackSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GoodStackSystemUI">
+      <HintPath>Libs\Timberborn.GoodStackSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GoodsUI">
+      <HintPath>Libs\Timberborn.GoodsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Growing">
+      <HintPath>Libs\Timberborn.Growing.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.GrowingUI">
+      <HintPath>Libs\Timberborn.GrowingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Hauling">
+      <HintPath>Libs\Timberborn.Hauling.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.HaulingUI">
+      <HintPath>Libs\Timberborn.HaulingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.InputSystem">
+      <HintPath>Libs\Timberborn.InputSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.InputSystemUI">
+      <HintPath>Libs\Timberborn.InputSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.InventorySystem">
+      <HintPath>Libs\Timberborn.InventorySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.InventorySystemUI">
+      <HintPath>Libs\Timberborn.InventorySystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.IrrigationSystem">
+      <HintPath>Libs\Timberborn.IrrigationSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.LaborSystem">
+      <HintPath>Libs\Timberborn.LaborSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.LaborSystemInitialization">
+      <HintPath>Libs\Timberborn.LaborSystemInitialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.LaborSystemUI">
+      <HintPath>Libs\Timberborn.LaborSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Language">
+      <HintPath>Libs\Timberborn.Language.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.LevelVisibilitySystem">
+      <HintPath>Libs\Timberborn.LevelVisibilitySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.LevelVisibilitySystemUI">
+      <HintPath>Libs\Timberborn.LevelVisibilitySystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Localization">
+      <HintPath>Libs\Timberborn.Localization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PathSystem">
+      <HintPath>Libs\Timberborn.PathSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Persistence">
+      <HintPath>Libs\Timberborn.Persistence.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PickObjectToolSystem">
+      <HintPath>Libs\Timberborn.PickObjectToolSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Planting">
+      <HintPath>Libs\Timberborn.Planting.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PlantingUI">
+      <HintPath>Libs\Timberborn.PlantingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Pollination">
+      <HintPath>Libs\Timberborn.Pollination.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Population">
+      <HintPath>Libs\Timberborn.Population.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PopulationUI">
+      <HintPath>Libs\Timberborn.PopulationUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PowerGenerating">
+      <HintPath>Libs\Timberborn.PowerGenerating.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PowerGeneratingUI">
+      <HintPath>Libs\Timberborn.PowerGeneratingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PrefabOptimization">
+      <HintPath>Libs\Timberborn.PrefabOptimization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PreviewSystem">
+      <HintPath>Libs\Timberborn.PreviewSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PrioritySystem">
+      <HintPath>Libs\Timberborn.PrioritySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.PrioritySystemUI">
+      <HintPath>Libs\Timberborn.PrioritySystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.QuickNotificationSystem">
+      <HintPath>Libs\Timberborn.QuickNotificationSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Rendering">
+      <HintPath>Libs\Timberborn.Rendering.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Reproduction">
+      <HintPath>Libs\Timberborn.Reproduction.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ReproductionUI">
+      <HintPath>Libs\Timberborn.ReproductionUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ReservableSystem">
+      <HintPath>Libs\Timberborn.ReservableSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ResourceCountingSystem">
+      <HintPath>Libs\Timberborn.ResourceCountingSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ResourceCountingSystemUI">
+      <HintPath>Libs\Timberborn.ResourceCountingSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Ruins">
+      <HintPath>Libs\Timberborn.Ruins.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.RuinsModelShuffling">
+      <HintPath>Libs\Timberborn.RuinsModelShuffling.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.RuinsNavigation">
+      <HintPath>Libs\Timberborn.RuinsNavigation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.RuinsUI">
+      <HintPath>Libs\Timberborn.RuinsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SceneLoading">
+      <HintPath>Libs\Timberborn.SceneLoading.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ScienceSystem">
+      <HintPath>Libs\Timberborn.ScienceSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ScreenSystem">
+      <HintPath>Libs\Timberborn.ScreenSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SelectionSystem">
+      <HintPath>Libs\Timberborn.SelectionSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SelectionToolSystem">
+      <HintPath>Libs\Timberborn.SelectionToolSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SettingsSystem">
+      <HintPath>Libs\Timberborn.SettingsSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SettingsSystemUI">
+      <HintPath>Libs\Timberborn.SettingsSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SettlementNameSystem">
+      <HintPath>Libs\Timberborn.SettlementNameSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SettlementNameSystemUI">
+      <HintPath>Libs\Timberborn.SettlementNameSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SimpleOutputBuildings">
+      <HintPath>Libs\Timberborn.SimpleOutputBuildings.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SimpleOutputBuildingsUI">
+      <HintPath>Libs\Timberborn.SimpleOutputBuildingsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SingletonSystem">
+      <HintPath>Libs\Timberborn.SingletonSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SkySystem">
+      <HintPath>Libs\Timberborn.SkySystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SleepSystem">
+      <HintPath>Libs\Timberborn.SleepSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SlotSystem">
+      <HintPath>Libs\Timberborn.SlotSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SoilMoistureSystem">
+      <HintPath>Libs\Timberborn.SoilMoistureSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SoilMoistureSystemUI">
+      <HintPath>Libs\Timberborn.SoilMoistureSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SoundSettingsSystem">
+      <HintPath>Libs\Timberborn.SoundSettingsSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SoundSystem">
+      <HintPath>Libs\Timberborn.SoundSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.StartingLocationSystem">
+      <HintPath>Libs\Timberborn.StartingLocationSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.StatusSystem">
+      <HintPath>Libs\Timberborn.StatusSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.SteamStoreSystem">
+      <HintPath>Libs\Timberborn.SteamStoreSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.StockKeeping">
+      <HintPath>Libs\Timberborn.StockKeeping.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.StoreSystem">
+      <HintPath>Libs\Timberborn.StoreSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TemplateSystem">
+      <HintPath>Libs\Timberborn.TemplateSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Terraforming">
+      <HintPath>Libs\Timberborn.Terraforming.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TerraformingUI">
+      <HintPath>Libs\Timberborn.TerraformingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TerrainSystem">
+      <HintPath>Libs\Timberborn.TerrainSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TickSystem">
+      <HintPath>Libs\Timberborn.TickSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TimeSpeedButtonSystem">
+      <HintPath>Libs\Timberborn.TimeSpeedButtonSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TimeSystem">
+      <HintPath>Libs\Timberborn.TimeSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TimeSystemUI">
+      <HintPath>Libs\Timberborn.TimeSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ToolPanelSystem">
+      <HintPath>Libs\Timberborn.ToolPanelSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.ToolSystem">
+      <HintPath>Libs\Timberborn.ToolSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TopBarSystem">
+      <HintPath>Libs\Timberborn.TopBarSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TutorialSettingsSystem">
+      <HintPath>Libs\Timberborn.TutorialSettingsSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TutorialSystem">
+      <HintPath>Libs\Timberborn.TutorialSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TutorialSystemInitialization">
+      <HintPath>Libs\Timberborn.TutorialSystemInitialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.TutorialSystemUI">
+      <HintPath>Libs\Timberborn.TutorialSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.UISound">
+      <HintPath>Libs\Timberborn.UISound.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WalkingSystem">
+      <HintPath>Libs\Timberborn.WalkingSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WalkingSystemUI">
+      <HintPath>Libs\Timberborn.WalkingSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Wandering">
+      <HintPath>Libs\Timberborn.Wandering.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Warehouses">
+      <HintPath>Libs\Timberborn.Warehouses.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WarehousesUI">
+      <HintPath>Libs\Timberborn.WarehousesUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterBuildings">
+      <HintPath>Libs\Timberborn.WaterBuildings.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterBuildingsNavigation">
+      <HintPath>Libs\Timberborn.WaterBuildingsNavigation.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterBuildingsUI">
+      <HintPath>Libs\Timberborn.WaterBuildingsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterObjects">
+      <HintPath>Libs\Timberborn.WaterObjects.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterSourceSystem">
+      <HintPath>Libs\Timberborn.WaterSourceSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterSourceSystemUI">
+      <HintPath>Libs\Timberborn.WaterSourceSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterSystem">
+      <HintPath>Libs\Timberborn.WaterSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterSystemRendering">
+      <HintPath>Libs\Timberborn.WaterSystemRendering.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WaterSystemUI">
+      <HintPath>Libs\Timberborn.WaterSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WeatherSystem">
+      <HintPath>Libs\Timberborn.WeatherSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WeatherSystemUI">
+      <HintPath>Libs\Timberborn.WeatherSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Wellbeing">
+      <HintPath>Libs\Timberborn.Wellbeing.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WellbeingUI">
+      <HintPath>Libs\Timberborn.WellbeingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WindSystem">
+      <HintPath>Libs\Timberborn.WindSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Workshops">
+      <HintPath>Libs\Timberborn.Workshops.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WorkshopsUI">
+      <HintPath>Libs\Timberborn.WorkshopsUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WorkSystem">
+      <HintPath>Libs\Timberborn.WorkSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WorkSystemUI">
+      <HintPath>Libs\Timberborn.WorkSystemUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.WorldSerialization">
+      <HintPath>Libs\Timberborn.WorldSerialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.Yielding">
+      <HintPath>Libs\Timberborn.Yielding.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Timberborn.YieldingUI">
+      <HintPath>Libs\Timberborn.YieldingUI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
